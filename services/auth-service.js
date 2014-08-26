@@ -3,6 +3,8 @@ angular.module('uploadApp')
     var username = "";
     var password = "";
 	// do not add any trailing slashes to install location
+	// you will need a "gaia" folder in the photos subdirectory
+	// of this installation
     var location = "";
     
     function getBasic() {

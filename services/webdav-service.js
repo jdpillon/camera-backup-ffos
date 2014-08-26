@@ -14,12 +14,11 @@ angular.module('uploadApp')
 		propBody.documentElement.appendChild(prop);
 		return(serializer.serializeToString(propBody));
 	    },
-
 	    propfind: function(url, properties) {
 		var deferred = $q.deferred();
 		var xhr = new XMLHttpRequest({mozSystem: true});
 		xhr.open("PROPFIND", url, true);
-		xhr.setRequestHeader("Auth", this.genAuth());
+		xhr.setRequestHeader("Auth", Auth.getBasic());
 		xhr.setRequestHeader("Content-type",
 				     "application/xml; charset='utf-8'");
 		xhr.onload = function (e) {
