@@ -5,12 +5,12 @@ angular.module('uploadApp')
 	    var deferred = $q.defer();	
 	    var photos = [];	
 	    var files = $window.navigator.getDeviceStorage('pictures');
-
 	    //for testing purpose, use gaia folder as a storage folder
-	    var cursor = files.enumerate('gaia');
-
+	    var cursor = files.enumerate();
+	    console.log(cursor);
 		cursor.onsuccess = function() {
 		    if (this.done) {
+			console.log("done");
 			photos.forEach(function(photo) {
 			    photo.src = $window.URL.createObjectURL(photo);
 			    photo.onServer = false;
@@ -18,6 +18,7 @@ angular.module('uploadApp')
 			deferred.resolve(photos);
 		    }
 		    else {
+			console.log(this.result);
 			photos.push(this.result);
 			this.continue();
 		    }
@@ -26,7 +27,6 @@ angular.module('uploadApp')
 		cursor.onerror = function() {
 		    deferred.reject("Error browsing the file system.");
 		};
-
 		return deferred.promise;
 	    },
 	    // this needs a refactor! perhaps with Underscore?
