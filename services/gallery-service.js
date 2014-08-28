@@ -1,13 +1,13 @@
 angular.module('uploadApp')
     .factory('Gallery', function($window, $q) {
 	return {		
-	getDeviceMedia: function() {
+	getDeviceMedia: function(storageName) {
 	    var deferred = $q.defer();	
 	    var photos = [];	
-	    var files = $window.navigator.getDeviceStorage('pictures');
-	    //for testing purpose, use gaia folder as a storage folder
-	    var cursor = files.enumerate();
-	    console.log(cursor);
+	    var files = $window.navigator.getDeviceStorage(storageName);
+	    //for testing purposes, use files.enumerate('gaia') to delegate a folder as a storage folder
+		var cursor = files.enumerate();
+		console.log(cursor);
 		cursor.onsuccess = function() {
 		    if (this.done) {
 			console.log("done");
@@ -23,12 +23,12 @@ angular.module('uploadApp')
 			this.continue();
 		    }
 		};
-
+		
 		cursor.onerror = function() {
-		    deferred.reject("Error browsing the file system.");
+		    deferred.reject("Cursor error: error browsing the " +  storageName + " file system.");
 		};
-		return deferred.promise;
-	    },
+	    return deferred.promise;
+	},
 	    // this needs a refactor! perhaps with Underscore?
 	    getMediaList: function(xml) {
 		var parser = new DOMParser();

@@ -1,15 +1,20 @@
 angular.module("uploadApp")
     .controller("galleryController", function ($scope, $log, $q, Gallery, webDAV, Auth) {
 	$scope.$log = $log;
+	$scope.photos = [];
 
-	var promise = Gallery.getDeviceMedia();
-	promise.then(function (result) {
-	    $scope.photos = result;
-	}, function (reason) {
-	    $log.error('Failed: ' + reason);
-	}, function (update) {
-	    $log.info('Notification: ' + update);
-	});
+	function bindMedia(storageType) { 
+	    var photoStorage = Gallery.getDeviceMedia(storageType);
+	    photoStorage.then(function (result) {
+		for (var i = 0; i < result.length; ++i) {
+		    $scope.photos.push(result[i]);
+		}
+	    }, function (reason) {
+		$log.error('Failed: ' + reason);
+	    }, function (update) {
+		$log.info('Notification: ' + update);
+	    });
+	}
 	
 	$scope.markNewImages = function () {
 	    webDAV
@@ -40,5 +45,7 @@ angular.module("uploadApp")
 
 	    $q.all(promises).then(summarize);
 	};
+	bindMedia('pictures');
+	bindMedia('sdcard');
 	//   $scope.markNewImages();
     });
